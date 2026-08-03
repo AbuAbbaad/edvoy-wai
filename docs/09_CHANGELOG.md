@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
-| **Last updated** | 2026-08-02 |
+| **Version** | 1.1.0 |
+| **Last updated** | 2026-08-03 |
 | **Status** | Living document |
 | **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) |
 
@@ -25,12 +25,18 @@
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.1.0 | 2026-08-03 | Added Review Log feature (US-R1 / FR20): review record + audit trail, follow-up tracking, outcome analytics, export. Additive; no business-rule changes |
 | 1.0.0 | 2026-08-02 | Consolidated Phase 1 (Product Discovery) + Phase 2 (Data Discovery) into the documentation repository |
 | 0.2.0 | 2026-08-02 | Phase 2 Data Discovery completed (source analysis, mappings, quality findings) |
 | 0.1.1 | 2026-08-02 | PRD updated: required daily hours confirmed configurable; 8.30h set as org-wide default |
 | 0.1.0 | 2026-08-02 | Phase 1 PRD produced |
 
 ## 2. Changes
+
+**1.1.0**
+- Added the **Review Log** (US-R1 / FR20): a filterable, exportable record of every review with status, action taken, follow-up date and a per-review audit trail; surfaces overdue follow-ups and reports outcomes; private manager notes excluded from all listings and exports.
+- Threaded additively through PRD (FR20, AC25, metrics, scope), Data Spec (§16 review + review_event entities), Permission Matrix (§5–§10 rows), Dashboard Spec (§9a screen), Master Spec (index + version).
+- New user story file `05a_USER_STORY_REVIEW_LOG.md`.
 
 **1.0.0**
 - Created the 10-document repository as the single source of truth.
@@ -56,6 +62,7 @@
 | DEC-09 | **Modular monolith** for the first release | Simplicity over premature microservices | ✅ Recommended (ratify in ADR) |
 | DEC-10 | **Super-admin cannot be removed** if final | Prevents accidental lockout | ✅ Confirmed |
 | DEC-11 | Recommended employee master **adds machine-readable fields** (real start/end times, Required Daily Minutes, numeric working days) while keeping all existing columns | Removes parsing ambiguity without breaking exports | ✅ Confirmed |
+| DEC-12 | **Review Log** records reviews, actions and follow-ups with a per-review audit trail; private notes never exported; "No action required" is a first-class outcome | Closes the review loop without becoming a scoring or disciplinary surface | ✅ Confirmed |
 
 ## 4. Rejected Ideas
 

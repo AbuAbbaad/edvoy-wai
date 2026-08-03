@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
-| **Last updated** | 2026-08-02 |
+| **Version** | 1.1.0 |
+| **Last updated** | 2026-08-03 |
 | **Status** | Approved (Phase 1) |
 | **Related** | [PRD](01_PRODUCT_REQUIREMENTS.md) · [Permissions](04_PERMISSION_MATRIX.md) · [Dashboard Spec](06_DASHBOARD_SPECIFICATION.md) |
 
@@ -257,6 +257,16 @@
 | **Priority** | P1 |
 | **Dependencies** | E2 |
 
+### F3
+| | |
+|---|---|
+| **Persona** | Reporting Manager |
+| **Story** | As a manager, I see a log of every review and the action taken, with follow-ups that are due, so nothing raised for a supportive conversation is lost. |
+| **Business value** | Follow-through; nothing dropped ([US-R1](05a_USER_STORY_REVIEW_LOG.md)) |
+| **Acceptance criteria** | Filterable, exportable review log; per-review audit trail; overdue follow-ups surfaced; private notes never exposed |
+| **Priority** | P1 |
+| **Dependencies** | F1 |
+
 ## Epic G — Administration & Policy
 
 ### G1
@@ -323,4 +333,4 @@
 
 ## Acceptance Criteria Master List
 
-The 24 MVP acceptance criteria are the single source in [`01_PRODUCT_REQUIREMENTS.md`](01_PRODUCT_REQUIREMENTS.md#12-acceptance-criteria). Story-level criteria above must all map to one or more of AC1–AC24.
+The 25 MVP acceptance criteria are the single source in [`01_PRODUCT_REQUIREMENTS.md`](01_PRODUCT_REQUIREMENTS.md#12-acceptance-criteria). Story-level criteria above must all map to one or more of AC1–AC25.

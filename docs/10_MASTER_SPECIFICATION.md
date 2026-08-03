@@ -150,7 +150,7 @@ flowchart TD
 | M1 Discovery signed off | Phases 1–2 reviewed by HR, management, engineering |
 | M2 Prototype approved | Clickable high-fidelity prototype validated against PRD |
 | M3 Schema frozen | Data model + ER diagram + API spec agreed |
-| M4 MVP demo | All 24 MVP acceptance criteria met on staging |
+| M4 MVP demo | All 25 MVP acceptance criteria met on staging |
 | M5 Production launch | Hardened, deployed, documented, handed over |
 
 ---
