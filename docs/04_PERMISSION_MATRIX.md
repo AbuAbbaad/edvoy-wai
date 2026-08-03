@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
-| **Last updated** | 2026-08-02 |
+| **Version** | 1.1.0 |
+| **Last updated** | 2026-08-03 |
 | **Status** | Approved (Phase 1) |
-| **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) · [Dashboard Spec](06_DASHBOARD_SPECIFICATION.md) |
+| **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) · [Dashboard Spec](06_DASHBOARD_SPECIFICATION.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
 > **Purpose.** Define authentication, roles, reporting-hierarchy rules, and every access matrix. **Access is always the intersection of role and hierarchy** — the smaller of what the role allows and what the person's reporting line permits. Front-end checks are never the only guard; every endpoint is enforced server-side.
 
@@ -86,6 +86,8 @@ flowchart TD
 | Employee-level insights | ✅ | ✅ | ✅ (own line) | ⬜* | ✅ |
 | Manager notes (private) | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
 | Manager notes (HR-visible) | ✅ | ✅ | ✅ (own line) | ⬜* | ✅ |
+| Review records (status, action, follow-up) | ✅ | ✅ | ✅ (own line) | ⬜* (HR-visible fields) | ✅ (view) |
+| Review audit trail | ✅ | ✅ | ✅ (own line) | ⬜* (HR-visible events) | ✅ (view) |
 | Import files & errors | ✅ | ✅ | ❌ | ✅ | ❌ |
 | Policy configuration | ✅ | ✅ | ❌ | ❌ | ❌ |
 | Audit log | ✅ | ✅ | ❌ | ❌ | ❌ |
@@ -102,6 +104,7 @@ flowchart TD
 | `POST /imports/*` | ✅ | ✅ | ❌ | ✅ | ❌ |
 | `GET /imports/history` | ✅ | ✅ | ❌ | ✅ | ❌ |
 | `POST /reviews`, `/notes` | ✅ | ✅ | ✅ (own line) | ❌ | ❌ |
+| `GET /reviews`, `/reviews/:id/events` (scoped) | ✅ | ✅ | ✅ (own line) | ⬜* (HR-visible) | ✅ (view) |
 | `PUT /policies/*`, `/shifts/*`, `/holidays/*`, `/premises/*` | ✅ | ✅ | ❌ | ❌ | ❌ |
 | `POST /users`, `/roles`, `/admins` | ✅ | ✅ (not final super-admin) | ❌ | ❌ | ❌ |
 | `POST /corrections` | ✅ | ✅ | ❌ | ⬜* | ❌ |
@@ -119,6 +122,7 @@ Every scoped endpoint enforces row-level hierarchy server-side, independent of a
 | Employee Detail | ✅ | ✅ | ✅ (own line) | ⬜* | ✅ |
 | Attendance Heatmap | ✅ | ✅ | ✅ (own line) | ⬜* | ✅ |
 | Insight Lists / Review | ✅ | ✅ | ✅ (own line) | ❌ | ✅ (view) |
+| Review Log | ✅ | ✅ | ✅ (own line) | ❌ | ✅ (view) |
 | Import Centre & History | ✅ | ✅ | ❌ | ✅ | ❌ |
 | Policy / Shift / Holiday / Premise settings | ✅ | ✅ | ❌ | ❌ | ❌ |
 | User & Role Management | ✅ | ✅ | ❌ | ❌ | ❌ |
@@ -146,6 +150,7 @@ Every scoped endpoint enforces row-level hierarchy server-side, independent of a
 | Late / short-hours / absence / remote / missing-punch | ✅ | ✅ | ✅ (own line) | ⬜* | ✅ |
 | Import audit report | ✅ | ✅ | ❌ | ✅ | ❌ |
 | Manager review status | ✅ | ✅ | ✅ (own line) | ❌ | ✅ |
+| Review log export (excl. private notes) | ✅ | ✅ | ✅ (own line) | ⬜* (HR-visible subset) | ✅ |
 | Data-quality report | ✅ | ✅ | ⬜ | ✅ | ⬜ |
 
 Every export records exported-by, timestamp, filters used, record count and report type; **row-level access is applied to exports**.
@@ -156,6 +161,6 @@ Every export records exported-by, timestamp, filters used, record count and repo
 |---|---|---|---|
 | View audit log | ✅ | ✅ | ❌ |
 | Export audit log | ✅ | ✅ | ❌ |
-| Audited actions (all roles) | login, failed login, access change, admin create/remove, upload, import, rollback, policy change, manual correction, export, note creation, review-status change | | |
+| Audited actions (all roles) | login, failed login, access change, admin create/remove, upload, import, rollback, policy change, manual correction, export, note creation, review-status change, review export | | |
 
 > Sensitive file contents and session tokens are **never** logged. See privacy constraints in [`08_TECHNICAL_CONSTRAINTS.md`](08_TECHNICAL_CONSTRAINTS.md).

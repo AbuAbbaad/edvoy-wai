@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
-| **Last updated** | 2026-08-02 |
+| **Version** | 1.1.0 |
+| **Last updated** | 2026-08-03 |
 | **Status** | Phases 1–2 complete; Phase 3 (UX) next |
 | **Owner** | Edvoy People & Engineering |
 
@@ -100,6 +100,7 @@ See the full tree in [Repository Tree](#4-repository-structure) at the end of th
 | [`03_ATTENDANCE_RULES.md`](03_ATTENDANCE_RULES.md) | Every calculation rule, formula, threshold and edge case |
 | [`04_PERMISSION_MATRIX.md`](04_PERMISSION_MATRIX.md) | Roles, hierarchy, and matrices for data/API/dashboard/import/export |
 | [`05_USER_STORIES.md`](05_USER_STORIES.md) | Epics and stories with acceptance criteria and priority |
+| [`05a_USER_STORY_REVIEW_LOG.md`](05a_USER_STORY_REVIEW_LOG.md) | User story US-R1 — Review Log: follow-up tracking, outcome analytics, export |
 | [`06_DASHBOARD_SPECIFICATION.md`](06_DASHBOARD_SPECIFICATION.md) | Every screen: widgets, actions, states, permissions |
 | [`07_UX_DECISIONS.md`](07_UX_DECISIONS.md) | Navigation, layout, accessibility, terminology, design principles |
 | [`08_TECHNICAL_CONSTRAINTS.md`](08_TECHNICAL_CONSTRAINTS.md) | Stack, hosting, security, privacy, performance targets |
@@ -109,6 +110,8 @@ See the full tree in [Repository Tree](#4-repository-structure) at the end of th
 ---
 
 ## 6. Current Version
+
+**v1.1.0** — Adds the **Review Log** feature (US-R1 / FR20): a filterable, exportable record of every review with its status, action taken, follow-up date and a full per-review audit trail; surfaces overdue follow-ups and reports on outcomes, while private manager notes stay private. It is the defined “what’s next” after a manager reviews an employee. Additive only — no business rule, metric, or threshold changes. Reuses PD9 for retention; introduces no new pending decisions.
 
 **v1.0.0** — Consolidation of Phase 1 (Product Discovery) and Phase 2 (Data Discovery). No application code exists yet. All figures are grounded in the July 2026 sample exports.
 

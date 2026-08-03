@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
-| **Last updated** | 2026-08-02 |
+| **Version** | 1.1.0 |
+| **Last updated** | 2026-08-03 |
 | **Status** | Approved (Phase 1) |
-| **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [Data Spec](02_DATA_SPECIFICATION.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) · [Permissions](04_PERMISSION_MATRIX.md) · [User Stories](05_USER_STORIES.md) |
+| **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [Data Spec](02_DATA_SPECIFICATION.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) · [Permissions](04_PERMISSION_MATRIX.md) · [User Stories](05_USER_STORIES.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
 > **Purpose.** Define what the Edvoy Workforce Attendance Intelligence Platform must do, for whom, and why — in plain business language for HR, management and engineering. Attendance data describes punches and calendars, not people.
 
@@ -134,10 +134,11 @@ Other journeys (detailed in [`05_USER_STORIES.md`](05_USER_STORIES.md)): HR Data
 | FR13 | Metrics | Lateness, short hours, absence, remote %, data quality — against assigned policy |
 | FR14 | Metrics | Eligible days as denominator; suppress when denominator too small; every metric drill-through |
 | FR15 | Dashboard | Default current month-to-date; scoped filters; summary cards; four insight lists |
-| FR16 | Review | Review status + private/HR notes, kept separate from raw data |
+| FR16 | Review | Review status + private/HR notes, kept separate from raw data; a status or note creates or updates a review record that appears in the review log (FR20) |
 | FR17 | Dashboard | Data-coverage warnings for missing/stale data |
 | FR18 | Audit | Audit sign-in, access/admin change, import, rollback, policy change, correction, export, note, review change |
 | FR19 | Reporting | Controlled exports recording who/when/filters/count; row-level access applied |
+| FR20 | Review | Review log: a filterable, exportable record of reviews with status, action taken, follow-up date and a per-review audit trail; private manager notes are excluded from all listings and exports |
 
 ## 10. Non-Functional Requirements
 
@@ -162,11 +163,12 @@ Summarised here; full detail in [`05_USER_STORIES.md`](05_USER_STORIES.md).
 | Import Centre | As an HR operator, I upload the daily Keka file and a duplicate upload does not double-count |
 | Metrics & Insights | As a manager, I see who is frequently late by their own shift, with evidence |
 | Review Workflow | As a manager, I record a note and review status against an insight |
+| Review Log | As a manager, I see a log of every review and the action taken, with follow-ups that are due (US-R1) |
 | Administration | As an admin, I configure the late threshold and required hours without code |
 
 ## 12. Acceptance Criteria
 
-The MVP is accepted when all 24 criteria hold (mirrored in [`05_USER_STORIES.md`](05_USER_STORIES.md#acceptance-criteria-master-list)):
+The MVP is accepted when all 25 criteria hold (mirrored in [`05_USER_STORIES.md`](05_USER_STORIES.md#acceptance-criteria-master-list)):
 
 1. A permitted user can sign in with Google authentication.
 2. A manager sees only employees in their authorised hierarchy.
@@ -192,6 +194,7 @@ The MVP is accepted when all 24 criteria hold (mirrored in [`05_USER_STORIES.md`
 22. Automated tests pass.
 23. Seed data included for demonstration.
 24. Documentation sufficient for another engineer to operate the platform.
+25. Reviews are recorded in a filterable, exportable log with follow-up tracking and a per-review audit trail; private notes are never exposed.
 
 ## 13. Success Metrics
 
@@ -203,6 +206,8 @@ The MVP is accepted when all 24 criteria hold (mirrored in [`05_USER_STORIES.md`
 | Time-to-understand a team | Legibility goal (G1) |
 | Unmapped-employee count trending to zero | Data completeness |
 | Zero false-absence complaints | Correctness of absence handling (G4) |
+| Review follow-up completion rate | Reviews are followed through, not dropped |
+| Overdue reviews trending down | Follow-up discipline is improving |
 
 ## 14. MVP Scope
 
@@ -212,7 +217,7 @@ The MVP is accepted when all 24 criteria hold (mirrored in [`05_USER_STORIES.md`
 - Attendance-day classification and core metrics: lateness (fixed shifts), short hours, absence (confirmed vs potential), remote share, missing-punch data quality.
 - Manager dashboard (current month default, standard filters, summary cards, four insight lists) — all drill-through.
 - Employee detail page with daily table, calendar and evidence.
-- Manager review workflow: status and notes.
+- Manager review workflow: status and notes, plus a review log with follow-up tracking and outcome reporting.
 - Admin settings for policies, shifts, holidays, premise mappings; user & admin management with super-admin safeguard.
 - Audit logging of sensitive actions; controlled exports of core reports.
 - Seed data and secure staging deployment.
@@ -226,6 +231,7 @@ The MVP is accepted when all 24 criteria hold (mirrored in [`05_USER_STORIES.md`
 - Monthly status-report import as a cross-check and reconciliation.
 - Early-departure and overnight-shift handling as first-class metrics.
 - PDF export styling, scheduled reports, subject-access / data-deletion workflows.
+- Automated in-app / email reminders for overdue review follow-ups (the MVP surfaces overdue reviews in-app only).
 - UI roll-back of a committed import.
 
 ## 16. Out of Scope

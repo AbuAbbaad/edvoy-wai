@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
-| **Last updated** | 2026-08-02 |
+| **Version** | 1.1.0 |
+| **Last updated** | 2026-08-03 |
 | **Status** | Draft for Phase 3 (from approved Phase 1 requirements) |
-| **Related** | [PRD](01_PRODUCT_REQUIREMENTS.md) · [Permissions](04_PERMISSION_MATRIX.md) · [UX Decisions](07_UX_DECISIONS.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) |
+| **Related** | [PRD](01_PRODUCT_REQUIREMENTS.md) · [Permissions](04_PERMISSION_MATRIX.md) · [UX Decisions](07_UX_DECISIONS.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
 > **Purpose.** Document every screen: purpose, widgets, user actions, validation, empty/loading states and permissions. Screen behaviour derives from approved PRD requirements; visual design is finalised in Phase 3.
 
@@ -22,6 +22,7 @@
 7. [Screen: Attendance Heatmap](#7-screen-attendance-heatmap)
 8. [Screen: Insight Lists](#8-screen-insight-lists)
 9. [Screen: Review Workflow](#9-screen-review-workflow)
+9a. [Screen: Review Log](#9a-screen-review-log)
 10. [Screen: Import Centre](#10-screen-import-centre)
 11. [Screen: Import History & Detail](#11-screen-import-history--detail)
 12. [Screen: Policy & Shift Settings](#12-screen-policy--shift-settings)
@@ -159,11 +160,27 @@ Four lists, each with evidence columns and a review-status column.
 | **Purpose** | Record constructive follow-up |
 | **Widgets** | Status selector; note fields (private / HR-visible); review & follow-up dates; agreed action; resolution reason; coaching-guidance panel |
 | **Statuses** | New, Reviewed, Employee clarification requested, Support required, Action agreed, Monitoring, Resolved, No action required, Data correction required |
-| **User actions** | Set status; add notes; set dates |
+| **User actions** | Set status; add notes; set dates; on save, go to the Review Log (“what’s next”) |
 | **Validation** | Notes stored separately from raw data; access scoped |
 | **Empty state** | "No review items" |
 | **Loading state** | Form skeleton |
 | **Permissions** | Manager (own line), Admin |
+
+## 9a. Screen: Review Log
+
+| Aspect | Detail |
+|---|---|
+| **Purpose** | A record of every attendance review, the action taken, and its follow-up — the defined “what’s next” after a review |
+| **Widgets** | Outcome KPIs (Total, Open, Overdue follow-up, Closed — the last three filter on click); filter bar (search, status, action taken, state); log table (Review · Employee · Pattern · Status · Action taken · Opened · Follow-up); actions-taken breakdown chart; review-trail modal |
+| **User actions** | Filter / search; open a record to see its full audit trail; continue a review; export the log |
+| **Validation** | Hierarchy-scoped; private manager notes never listed, shown in the trail, or exported; export records who/when/filters/count |
+| **Empty state** | “No reviews match these filters” |
+| **Loading state** | Table skeleton |
+| **Permissions** | Manager (own line), Admin, Read-Only (view) |
+
+**Components introduced.** *Review-trail modal* — read-only history for one review (current status, action taken, opened, follow-up/overdue/closed, HR-visible note, and the chronological event list), with a “Continue review” action and a privacy note that private notes are never shown or exported. *Actions-taken chart* — a neutral bar chart of reviews by action taken; honest axis, no colour-as-verdict, never ranks people.
+
+**Overdue.** An open review whose follow-up date has passed is labelled *Overdue* (label as well as any colour). Overdue is a prompt, not a judgement.
 
 ## 10. Screen: Import Centre
 

@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
-| **Last updated** | 2026-08-02 |
+| **Version** | 1.1.0 |
+| **Last updated** | 2026-08-03 |
 | **Status** | Approved (Phase 2) |
-| **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) |
+| **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
 > **Purpose.** The authoritative reference for every source file, its columns, quality issues, mappings, and the rules for importing, re-importing and correcting data. All figures are from the July 2026 sample exports.
 
@@ -28,6 +28,7 @@
 13. [Incremental & Reimport Rules](#13-incremental--reimport-rules)
 14. [Correction Rules](#14-correction-rules)
 15. [Data Lineage](#15-data-lineage)
+16. [Review Entities](#16-review-entities)
 
 ---
 
@@ -339,3 +340,59 @@ flowchart LR
 ```
 
 Every attendance figure is traceable back through MetricSnapshot → AttendanceDay → AttendanceRecord → the exact import file and row it came from. See [`03_ATTENDANCE_RULES.md`](03_ATTENDANCE_RULES.md) for how AttendanceDay is derived.
+
+## 16. Review Entities
+
+Derived, action-populated entities that back the **Review Log** (see [PRD FR20](01_PRODUCT_REQUIREMENTS.md#9-functional-requirements) and [US-R1](05a_USER_STORY_REVIEW_LOG.md)). They are created by manager action, **not** by import, and they never alter imported attendance rows.
+
+### `review`
+
+One row per attendance review a manager conducts.
+
+| Field | Type | Notes |
+|---|---|---|
+| `review_id` | string (PK) | Human-readable, e.g. `RV-1042` |
+| `employee_number` | string (FK → employee master) | Who the review concerns; hierarchy-scoped |
+| `pattern` | enum | Origin insight: `late` · `short_hours` · `absence` · `remote` |
+| `opened_at` | datetime | Set on first status/note |
+| `status` | enum | One of the nine review statuses (unchanged) |
+| `action` | enum | Outcome — see the action vocabulary below |
+| `follow_up_date` | date · nullable | Drives the overdue flag |
+| `closed_at` | datetime · nullable | Set when status becomes `resolved` or `no_action` |
+| `note_hr` | text · nullable | HR-visible note; **included** in exports |
+| `note_private` | text · nullable | Private manager note; **never** listed, shown in the trail, or exported |
+| `manager_number` | string (FK → employee master) | The reviewing manager |
+
+### `review_event` (audit trail)
+
+Append-only history for a review. One row per change.
+
+| Field | Type | Notes |
+|---|---|---|
+| `event_id` | string (PK) | |
+| `review_id` | string (FK → review) | |
+| `at` | datetime | When the change happened |
+| `actor` | string | Who made the change |
+| `action` | string | e.g. `Review opened`, `Status → Action agreed` |
+| `detail` | text · nullable | Optional context (never the private note) |
+
+### Action vocabulary
+
+Distinct from status. Status = *where is this review?*; action = *what did we do?*
+
+| `action` value | Label |
+|---|---|
+| `none` | No action required |
+| `monitor` | Monitoring for a period |
+| `shift` | Shift / schedule review |
+| `support` | Support offered |
+| `clarify` | Clarification requested |
+| `datafix` | Data correction raised |
+| `arrangement` | Flexible arrangement agreed |
+| `escalate` | Escalated to HR |
+
+### Relationships & retention
+
+- A `review` belongs to exactly one employee and one manager; it has many `review_event` rows.
+- Notes split into `note_private` (manager-only) and `note_hr` (shareable); the split is enforced server-side, not merely hidden in the UI.
+- Review records and their events follow the same retention policy as audit data (**PD9**). They are never derived from, and never alter, imported attendance rows.
