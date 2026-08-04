@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.2.0 |
-| **Last updated** | 2026-08-04 |
+| **Version** | 1.3.0 |
+| **Last updated** | 2026-08-05 |
 | **Status** | Draft for Phase 3 (from approved Phase 1 requirements) |
 | **Related** | [PRD](01_PRODUCT_REQUIREMENTS.md) · [Permissions](04_PERMISSION_MATRIX.md) · [UX Decisions](07_UX_DECISIONS.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
@@ -31,6 +31,8 @@
 15. [Screen: Audit Log](#15-screen-audit-log)
 16. [Screen: System Health & Data Coverage](#16-screen-system-health--data-coverage)
 17. [Cross-cutting: Cards, Filters, Charts, KPIs, Drill-downs](#17-cross-cutting-elements)
+17a. [Date-Range Control](#17a-date-range-control)
+17b. [Trend Bucketing by Range](#17b-trend-bucketing-by-range)
 
 ---
 
@@ -86,7 +88,7 @@ Navigation items are **filtered by role** per the [Dashboard Visibility Matrix](
 | Aspect | Detail |
 |---|---|
 | **Purpose** | A manager's month-to-date view of their team |
-| **Widgets** | Summary cards; four insight lists; charts; data-coverage warnings; filter bar |
+| **Widgets** | Summary cards; four insight lists; charts; data-coverage warnings; filter bar with the **date-range control** (§17a) |
 | **User actions** | Change filters; open a card/insight; go to employee detail |
 | **Validation** | Filter values scoped to hierarchy; suppress frequency where denominator too small |
 | **Empty state** | "No team data for this period" + coverage guidance |
@@ -271,10 +273,54 @@ Four lists, each with evidence columns and a review-status column.
 
 ## 17. Cross-cutting Elements
 
-**Filters:** date range, month, country, location, department, sub-department, cost centre, reporting manager, employee, job title, shift type, employment type, attendance status, work premise, alert type — **scoped to the user's access**.
+**Filters:** a **date-range control** (see §17a), plus country, location, department, sub-department, cost centre, reporting manager, employee, job title, shift type, employment type, attendance status, work premise, alert type — **scoped to the user's access**.
 
 **Cards / KPIs:** always current value + previous-period comparison + trend + definition tooltip + click-through.
 
 **Charts (simple, honest, no misleading axes):** attendance trend by week; average effective hours by sub-department; on-time % by sub-department; late-arrival trend; short-hours trend; office vs remote; absence trend; missing-punch trend; department comparison; location comparison; weekday pattern.
 
 **Drill-downs:** every card, insight and chart opens the supporting days and punches (explainability, [PRD G5](01_PRODUCT_REQUIREMENTS.md#4-product-goals)).
+
+---
+
+## 17a. Date-Range Control
+
+Every analytics screen (Manager Dashboard, Organisation Dashboard, Employee Detail, Heatmap, Insight Lists, Review Log) carries one shared date-range control. It sets the period all metrics, cards, insight lists and trends are computed over.
+
+**Presets** (calendar-aligned by default):
+
+| Preset | Window | Notes |
+|---|---|---|
+| Today | The current calendar day | Operational check; trends switch to intra-day or summary (see §17b) |
+| Yesterday | The previous calendar day | Same intra-day/summary treatment as Today |
+| This week | Monday 00:00 → now, current ISO week | Short-horizon check-in |
+| **This month** *(default)* | 1st of the month → now (month-to-date) | Unchanged default; preserves prior behaviour |
+| Last 3 months | Start of the month two months ago → now | Pattern horizon; aligns with frequency thresholds |
+| Custom range | Any start–end the user picks | Bounded by available data; end defaults to today |
+
+- **Default remains This month** (month-to-date) — no change to the landing behaviour agreed in [UX §7](07_UX_DECISIONS.md#7-dashboard-philosophy).
+- **Calendar-aligned** windows are the default (a month means the 1st onward, a week means Monday onward), matching the existing "current calendar month" language. A policy option may switch an organisation to **rolling** windows (Last 7 / 30 / 90 days) where that suits reporting; the two must never be silently mixed, and the active mode is shown in the control's label.
+- The chosen range is **reflected in the previous-period comparison**: "vs last month" becomes "vs previous period" of equal length (previous day, week, 3 months, or the equivalent custom span). Comparisons are only shown when a comparable prior period has data; otherwise the card shows the value without a delta and a short "no comparison period" note — never a fabricated trend.
+- **Frequency metrics** (late %, short-hours %, absence, remote) still use **eligible days within the selected range** as the denominator, and the existing small-denominator suppression ([Attendance Rules §8](03_ATTENDANCE_RULES.md#8-attendance-percentage-rules)) applies: very short ranges (e.g. Today) will frequently suppress frequency flags and show a coverage note instead of an unreliable percentage. This is intended — a single day is not a pattern.
+- **Coverage honesty:** when the selected range extends beyond the imported data, the screen shows the data it has and a coverage note ("showing available data for <range>"); it never pads missing days as zero or absent.
+- Business rules, thresholds and classifications are **unchanged** — only the window they are computed over changes.
+
+## 17b. Trend Bucketing by Range
+
+Trend charts (weekly attendance, late-arrival, short-hours, absence, missing-punch, effective-hours) **must re-bucket to match the selected range** so the x-axis stays honest. A fixed four-week axis under a variable range would misrepresent the data and is not allowed.
+
+| Selected range | Trend bucket | Approx. points |
+|---|---|---|
+| Today | Hourly, or a single-value summary card if punches are too few | ≤ 24 |
+| Yesterday | Hourly, or summary | ≤ 24 |
+| This week | Daily | 5–7 |
+| This month | Weekly *(current behaviour)* | 4–5 |
+| Last 3 months | Weekly (or monthly for very dense orgs) | ~12–13 |
+| Custom range | Bucket chosen from the span: ≤ 2 days → hourly; ≤ 6 weeks → daily/weekly; longer → weekly/monthly | target 5–15 |
+
+- **Honest axis, honest buckets.** The bucket unit is labelled on the axis (hours / days / weeks / months). Baselines still start at 0; no truncated axes.
+- **Too few points → no fake line.** When a range yields fewer than two buckets (e.g. Today), the trend is shown as a **single summary value with its definition**, not a one-point "line" implying a trend.
+- **Partial buckets** at the range edges are drawn but labelled partial (e.g. a part-week at the start of a 3-month view), so a short bar isn't misread as a decline.
+- Bucketing changes only **presentation of the same underlying day-level data**; it introduces no new metric and changes no threshold.
+
+

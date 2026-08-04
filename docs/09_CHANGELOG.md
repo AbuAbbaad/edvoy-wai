@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.2.0 |
-| **Last updated** | 2026-08-04 |
+| **Version** | 1.3.0 |
+| **Last updated** | 2026-08-05 |
 | **Status** | Living document |
 | **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) |
 
@@ -25,6 +25,7 @@
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.3.0 | 2026-08-05 | Customisable date-range control (Today / Yesterday / This week / This month default / Last 3 months / Custom) across analytics screens, with trend charts that re-bucket to the selected range (hourly/daily/weekly/monthly). Additive; no threshold or classification changes |
 | 1.2.0 | 2026-08-04 | Access-request governance: applicant submits identity + justification only (no role); admin assigns role on approval (default Read-Only); Add/Edit-user role management specified. Surfaced by the round-3 UX audit. Additive; no attendance-rule changes |
 | 1.1.0 | 2026-08-03 | Added Review Log feature (US-R1 / FR20): review record + audit trail, follow-up tracking, outcome analytics, export. Additive; no business-rule changes |
 | 1.0.0 | 2026-08-02 | Consolidated Phase 1 (Product Discovery) + Phase 2 (Data Discovery) into the documentation repository |
@@ -33,6 +34,11 @@
 | 0.1.0 | 2026-08-02 | Phase 1 PRD produced |
 
 ## 2. Changes
+
+**1.3.0**
+- **Customisable date range** added to every analytics screen. Presets: Today, Yesterday, This week, **This month (default, unchanged)**, Last 3 months, Custom range. Calendar-aligned by default; a rolling-window mode is a configurable option.
+- **Trend charts re-bucket to the range** (hourly / daily / weekly / monthly) so the x-axis stays honest; a range too short for a trend shows a single summary value rather than a one-point line. Previous-period comparison becomes "vs previous period" of equal length.
+- Business rules, thresholds and classifications unchanged — only the window metrics are computed over. Added Dashboard Spec §17a/§17b; updated UX Decisions §7.
 
 **1.2.0**
 - **Access-request governance clarified and tightened** (surfaced by the round-3 UX audit). The applicant's request form captures identity + optional justification only and **must not** offer a role; the administrator **assigns the role on approval**, defaulting to least-privilege Read-Only. Approve/decline and role changes are audited.
@@ -70,6 +76,7 @@
 | DEC-11 | Recommended employee master **adds machine-readable fields** (real start/end times, Required Daily Minutes, numeric working days) while keeping all existing columns | Removes parsing ambiguity without breaking exports | ✅ Confirmed |
 | DEC-12 | **Review Log** records reviews, actions and follow-ups with a per-review audit trail; private notes never exported; "No action required" is a first-class outcome | Closes the review loop without becoming a scoring or disciplinary surface | ✅ Confirmed |
 | DEC-13 | **Access requests carry no applicant-chosen role; the administrator assigns the role on approval (default Read-Only)** | Preserves least-privilege; keeps the access decision with admins, not requesters | ✅ Confirmed |
+| DEC-14 | **Date range is user-customisable (default This month unchanged); trend charts re-bucket to the selected range** | Managers ask daily, weekly and quarterly questions; fixed weekly buckets under a variable range would misrepresent the data | ✅ Confirmed |
 
 ## 4. Rejected Ideas
 

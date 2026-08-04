@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.2.0 |
-| **Last updated** | 2026-08-04 |
+| **Version** | 1.3.0 |
+| **Last updated** | 2026-08-05 |
 | **Status** | Phases 1–2 complete; Phase 3 (UX) next |
 | **Owner** | Edvoy People & Engineering |
 
@@ -111,6 +111,8 @@ See the full tree in [Repository Tree](#4-repository-structure) at the end of th
 
 ## 6. Current Version
 
+
+**v1.3.0** — Adds a **customisable date-range control** (Today, Yesterday, This week, This month [default, unchanged], Last 3 months, Custom) to every analytics screen, and makes **trend charts re-bucket to the selected range** (hourly/daily/weekly/monthly) so the axis stays honest. Additive; no threshold or classification changes. Updates Dashboard Spec §17a/§17b and UX Decisions §7.
 
 **v1.2.0** — Tightens **access-request governance** (from the round-3 UX audit): the applicant submits identity and an optional justification only — never a role — and an administrator assigns the role on approval, defaulting to least-privilege Read-Only. Adds Permission Matrix §3a, User Story G5, and Dashboard Spec updates for Add/Edit-user role management. Additive; no attendance-rule changes.
 

@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
-| **Last updated** | 2026-08-02 |
+| **Version** | 1.1.0 |
+| **Last updated** | 2026-08-05 |
 | **Status** | Draft for Phase 3 (from approved Phase 1 principles) |
 | **Related** | [PRD](01_PRODUCT_REQUIREMENTS.md) · [Dashboard Spec](06_DASHBOARD_SPECIFICATION.md) · [Technical Constraints](08_TECHNICAL_CONSTRAINTS.md) |
 
@@ -82,8 +82,11 @@
 ## 7. Dashboard Philosophy
 
 - Default to **current calendar month to date**.
+- A **date-range control** lets the user widen or narrow that window — Today, Yesterday, This week, This month (default), Last 3 months, or a custom range — so the dashboard answers both daily operational questions and quarter-length pattern questions. Windows are calendar-aligned by default; see [Dashboard Spec §17a](06_DASHBOARD_SPECIFICATION.md#17a-date-range-control).
+- **Trends follow the range.** Trend charts re-bucket to the selected window (hourly / daily / weekly / monthly) rather than a fixed four-week axis; a range too short for a trend shows a single summary value, never a one-point line. This keeps "honest visuals" true across ranges; see [Dashboard Spec §17b](06_DASHBOARD_SPECIFICATION.md#17b-trend-bucketing-by-range).
+- A very short range legitimately suppresses frequency flags (a day is not a pattern) and shows a coverage note instead of an unreliable percentage.
 - Lead with a small number of meaningful cards; avoid overwhelming density.
-- Every card carries current value, previous-period comparison, trend and a definition tooltip.
+- Every card carries current value, previous-period comparison (of equal length to the selected range), trend and a definition tooltip.
 - Coverage warnings are prominent when data is missing/stale, so no one misreads gaps as facts.
 
 ## 8. Terminology
