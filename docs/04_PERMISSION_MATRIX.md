@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.1.0 |
-| **Last updated** | 2026-08-03 |
+| **Version** | 1.2.0 |
+| **Last updated** | 2026-08-04 |
 | **Status** | Approved (Phase 1) |
 | **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) · [Dashboard Spec](06_DASHBOARD_SPECIFICATION.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
@@ -16,6 +16,7 @@
 1. [Authentication](#1-authentication)
 2. [Google Login](#2-google-login)
 3. [User Roles](#3-user-roles)
+3a. [Access-Request & Role-Assignment Governance](#3a-access-request--role-assignment-governance)
 4. [Reporting Hierarchy Rules](#4-reporting-hierarchy-rules)
 5. [Data Visibility Matrix](#5-data-visibility-matrix)
 6. [API Permission Matrix](#6-api-permission-matrix)
@@ -36,7 +37,7 @@
 | Sessions | Secure server-side sessions; automatic expiry & logout; last-login stored |
 | Logging | Successful **and** failed sign-ins logged |
 | Authorisation | Role-based + row-level hierarchy on every endpoint |
-| Access denied | Screen with a "request access" route; requests appear in the admin's pending queue |
+| Access denied | Screen with a "request access" route. The applicant submits **identity and an optional justification only — never a role**; the request appears in the admin's pending queue, where an **administrator assigns the role on approval** (see §3a) |
 
 ## 2. Google Login
 
@@ -51,6 +52,9 @@ flowchart TD
     E -- yes --> F[Create secure session · store last login · log success]
     F --> G[Land on role's default screen]
     R --> Q[(Pending access request → Admin)]
+    Q --> AR{Admin approves?}
+    AR -- yes --> RG[Admin assigns role · default Read-Only · audited]
+    AR -- no --> DC[Declined · audited]
 ```
 
 ## 3. User Roles
@@ -64,6 +68,21 @@ flowchart TD
 | **Read-Only User (Management Viewer)** | HR / senior leadership | Org-wide dashboards & reports, view-only |
 
 **Super-admin safeguard:** an administrator can add/remove other administrators, but the system **must prevent removal of the final super-admin access** (the last remaining super admin cannot be removed accidentally).
+
+## 3a. Access-Request & Role-Assignment Governance
+
+Access is granted by an administrator, never self-selected by the requester. This rule closes an ambiguity in earlier versions and is enforced server-side.
+
+| Stage | Rule |
+|---|---|
+| **Request (applicant)** | An authenticated-but-unauthorised user may submit an access request carrying **only** their identity (name, work email from the verified session) and an **optional free-text justification**. The request form **must not** offer or capture a role. |
+| **Queue (admin)** | The pending-requests queue shows each applicant's identity, timestamp and justification. It **must not** present an applicant-supplied "requested role" as if it were entitled or pre-approved. |
+| **Approve (admin)** | Approval is a deliberate role-granting action: the administrator **must choose the role** to grant, defaulting to the **least-privilege Read-Only**. Approval creates the active user with exactly that role and clears the request. |
+| **Decline (admin)** | Declining closes the request with no user created. |
+| **Audit** | Both approve (with the granted role) and decline are written to the audit log with actor, subject, role granted (if any) and timestamp. |
+| **Least privilege** | No path may grant a role higher than the administrator explicitly selects. A request never carries a role into the grant. |
+
+> **Rationale.** A requester who could name their own role could anchor or pre-empt the approval decision. Separating *who requests* from *who grants the role* keeps access decisions with administrators and preserves least-privilege.
 
 ## 4. Reporting Hierarchy Rules
 

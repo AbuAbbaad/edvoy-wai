@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.1.0 |
-| **Last updated** | 2026-08-03 |
+| **Version** | 1.2.0 |
+| **Last updated** | 2026-08-04 |
 | **Status** | Phases 1–2 complete; Phase 3 (UX) next |
 | **Owner** | Edvoy People & Engineering |
 
@@ -110,6 +110,9 @@ See the full tree in [Repository Tree](#4-repository-structure) at the end of th
 ---
 
 ## 6. Current Version
+
+
+**v1.2.0** — Tightens **access-request governance** (from the round-3 UX audit): the applicant submits identity and an optional justification only — never a role — and an administrator assigns the role on approval, defaulting to least-privilege Read-Only. Adds Permission Matrix §3a, User Story G5, and Dashboard Spec updates for Add/Edit-user role management. Additive; no attendance-rule changes.
 
 **v1.1.0** — Adds the **Review Log** feature (US-R1 / FR20): a filterable, exportable record of every review with its status, action taken, follow-up date and a full per-review audit trail; surfaces overdue follow-ups and reports on outcomes, while private manager notes stay private. It is the defined “what’s next” after a manager reviews an employee. Additive only — no business rule, metric, or threshold changes. Reuses PD9 for retention; introduces no new pending decisions.
 

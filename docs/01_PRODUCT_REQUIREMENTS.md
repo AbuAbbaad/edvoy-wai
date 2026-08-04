@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.1.0 |
-| **Last updated** | 2026-08-03 |
+| **Version** | 1.2.0 |
+| **Last updated** | 2026-08-04 |
 | **Status** | Approved (Phase 1) |
 | **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [Data Spec](02_DATA_SPECIFICATION.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) · [Permissions](04_PERMISSION_MATRIX.md) · [User Stories](05_USER_STORIES.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
@@ -121,7 +121,7 @@ Other journeys (detailed in [`05_USER_STORIES.md`](05_USER_STORIES.md)): HR Data
 |---|---|---|
 | FR1 | Auth | Google Workspace sign-in restricted to approved domains (initially edvoy.com) |
 | FR2 | Auth | Validate email against active employee before access; secure server-side sessions; store last login; log success/failure |
-| FR3 | Auth | Server-side permission on every endpoint; row-level access by hierarchy; access-denied screen with request route |
+| FR3 | Auth | Server-side permission on every endpoint; row-level access by hierarchy; access-denied screen with request route ; access requests carry no applicant-chosen role — an administrator assigns the role on approval, default Read-Only (see Permissions §3a) |
 | FR4 | Import | Guided Import Centre for employee master, attendance, holiday, leave |
 | FR5 | Import | Accept .xlsx and .csv (.xls where safe); header detection + alias matching + saved mapping templates |
 | FR6 | Import | Validate before commit; import valid / reject invalid / cancel; download rejected rows with reasons |

@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.1.0 |
-| **Last updated** | 2026-08-03 |
+| **Version** | 1.2.0 |
+| **Last updated** | 2026-08-04 |
 | **Status** | Approved (Phase 1) |
 | **Related** | [PRD](01_PRODUCT_REQUIREMENTS.md) · [Permissions](04_PERMISSION_MATRIX.md) · [Dashboard Spec](06_DASHBOARD_SPECIFICATION.md) |
 
@@ -53,7 +53,7 @@
 | **Persona** | Any employee |
 | **Story** | As a person without reports, I see an access-denied screen with a way to request access. |
 | **Business value** | Clear path in, no dead end |
-| **Acceptance criteria** | Access-denied screen; request routes to admin's pending queue; decision logged |
+| **Acceptance criteria** | Access-denied screen; request form captures **identity + optional justification only — no role field**; request routes to admin's pending queue; decision logged |
 | **Priority** | P0 |
 | **Dependencies** | A1, G3 |
 
@@ -295,7 +295,7 @@
 | **Persona** | Administrator |
 | **Story** | As an admin, I review and action pending access requests. |
 | **Business value** | Controlled onboarding |
-| **Acceptance criteria** | Pending queue; grant role / decline; decision logged |
+| **Acceptance criteria** | Pending queue shows identity + justification (no applicant-supplied role); on approve the admin **must select the role to grant (default Read-Only)**, which creates the user with that role; decline creates no user; both outcomes audited with actor, subject, role granted and timestamp (see [Permissions §3a](04_PERMISSION_MATRIX.md#3a-access-request--role-assignment-governance)) |
 | **Priority** | P0 |
 | **Dependencies** | A3 |
 
@@ -308,6 +308,16 @@
 | **Acceptance criteria** | CRUD with effective dates; premise map covers Office/Remote/Adjustment/unclassified |
 | **Priority** | P0 |
 | **Dependencies** | C1 |
+
+### G5
+| | |
+|---|---|
+| **Persona** | Administrator |
+| **Story** | As an admin, I add a user and set or change a user's role directly. |
+| **Business value** | Complete user administration, not only request-driven onboarding |
+| **Acceptance criteria** | Add-user action captures identity and an **admin-selected role**; per-user role change takes effect and is audited (old → new); final super-admin cannot be removed |
+| **Priority** | P0 |
+| **Dependencies** | G2, [Permissions §3a](04_PERMISSION_MATRIX.md#3a-access-request--role-assignment-governance) |
 
 ## Epic H — Audit, Export & Governance
 

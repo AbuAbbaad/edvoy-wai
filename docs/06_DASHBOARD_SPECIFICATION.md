@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.1.0 |
-| **Last updated** | 2026-08-03 |
+| **Version** | 1.2.0 |
+| **Last updated** | 2026-08-04 |
 | **Status** | Draft for Phase 3 (from approved Phase 1 requirements) |
 | **Related** | [PRD](01_PRODUCT_REQUIREMENTS.md) · [Permissions](04_PERMISSION_MATRIX.md) · [UX Decisions](07_UX_DECISIONS.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
@@ -74,8 +74,8 @@ Navigation items are **filtered by role** per the [Dashboard Visibility Matrix](
 | Aspect | Detail |
 |---|---|
 | **Purpose** | Explain no access and offer a request route |
-| **Widgets** | Message; "Request access" button; status of any prior request |
-| **User actions** | Submit access request |
+| **Widgets** | Message; optional justification field; "Request access" button; status of any prior request. **No role selector** — the applicant never chooses a role |
+| **User actions** | Submit access request (identity + optional justification only) |
 | **Validation** | One open request per user |
 | **Empty state** | No prior request |
 | **Loading state** | Submitting request |
@@ -238,9 +238,9 @@ Four lists, each with evidence columns and a review-status column.
 | Aspect | Detail |
 |---|---|
 | **Purpose** | Manage users, roles and admins |
-| **Widgets** | User list; role assignment; admin management; pending access requests |
-| **User actions** | Grant/revoke roles; add/remove admins; action requests |
-| **Validation** | **Cannot remove final super-admin**; changes audited |
+| **Widgets** | User list; **Add user** (opens a dialog: identity + admin-selected role); per-user **Edit** (change role); admin management; pending access requests queue showing identity + justification (no applicant-supplied role) |
+| **User actions** | Add user with a chosen role; change a user's role; add/remove admins; **approve a request by selecting the role to grant (default Read-Only)** or decline it |
+| **Validation** | **Cannot remove final super-admin**; approval requires an explicit role choice; every add/role-change/approve/decline is audited (old → new where applicable). See [Permissions §3a](04_PERMISSION_MATRIX.md#3a-access-request--role-assignment-governance) |
 | **Empty state** | "No pending requests" |
 | **Loading state** | Row skeletons |
 | **Permissions** | Super Admin, Admin |

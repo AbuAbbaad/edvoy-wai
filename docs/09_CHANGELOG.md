@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.1.0 |
-| **Last updated** | 2026-08-03 |
+| **Version** | 1.2.0 |
+| **Last updated** | 2026-08-04 |
 | **Status** | Living document |
 | **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) |
 
@@ -25,6 +25,7 @@
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.2.0 | 2026-08-04 | Access-request governance: applicant submits identity + justification only (no role); admin assigns role on approval (default Read-Only); Add/Edit-user role management specified. Surfaced by the round-3 UX audit. Additive; no attendance-rule changes |
 | 1.1.0 | 2026-08-03 | Added Review Log feature (US-R1 / FR20): review record + audit trail, follow-up tracking, outcome analytics, export. Additive; no business-rule changes |
 | 1.0.0 | 2026-08-02 | Consolidated Phase 1 (Product Discovery) + Phase 2 (Data Discovery) into the documentation repository |
 | 0.2.0 | 2026-08-02 | Phase 2 Data Discovery completed (source analysis, mappings, quality findings) |
@@ -32,6 +33,11 @@
 | 0.1.0 | 2026-08-02 | Phase 1 PRD produced |
 
 ## 2. Changes
+
+**1.2.0**
+- **Access-request governance clarified and tightened** (surfaced by the round-3 UX audit). The applicant's request form captures identity + optional justification only and **must not** offer a role; the administrator **assigns the role on approval**, defaulting to least-privilege Read-Only. Approve/decline and role changes are audited.
+- Added **Permission Matrix §3a** (Access-Request & Role-Assignment Governance), amended the login-flow diagram, and updated User Stories **A3** and **G3** plus new **G5** (Add/Edit user with an admin-selected role); Dashboard Spec §3 and §14 updated.
+- No change to attendance rules, metrics, thresholds, or the Review Log.
 
 **1.1.0**
 - Added the **Review Log** (US-R1 / FR20): a filterable, exportable record of every review with status, action taken, follow-up date and a per-review audit trail; surfaces overdue follow-ups and reports outcomes; private manager notes excluded from all listings and exports.
@@ -63,6 +69,7 @@
 | DEC-10 | **Super-admin cannot be removed** if final | Prevents accidental lockout | ✅ Confirmed |
 | DEC-11 | Recommended employee master **adds machine-readable fields** (real start/end times, Required Daily Minutes, numeric working days) while keeping all existing columns | Removes parsing ambiguity without breaking exports | ✅ Confirmed |
 | DEC-12 | **Review Log** records reviews, actions and follow-ups with a per-review audit trail; private notes never exported; "No action required" is a first-class outcome | Closes the review loop without becoming a scoring or disciplinary surface | ✅ Confirmed |
+| DEC-13 | **Access requests carry no applicant-chosen role; the administrator assigns the role on approval (default Read-Only)** | Preserves least-privilege; keeps the access decision with admins, not requesters | ✅ Confirmed |
 
 ## 4. Rejected Ideas
 
