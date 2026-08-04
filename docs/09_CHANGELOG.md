@@ -40,6 +40,7 @@
 - **Import & Policy action flows specified** (Dashboard Spec §12a). A full button-level QC of the prototype found controls that were named in the spec but had no defined behaviour and were inert in the build: *Download template, View imported records, Compare with previous, Reject all & cancel, Reprocess, Roll back, Save & recalculate*. Each now has a defined trigger, result, states, permissions and audit entry.
 - Principle added: a visible-but-inert control is a defect; every control resolves to a result, a confirm-then-result, a disabled state with a reason, or a permission/flag-hidden state.
 - Additive; no attendance rule, threshold or classification changes.
+- **Implemented in the prototype:** all seven flows are now wired — Download template, View imported records, Compare with previous, Reject all & cancel, Reprocess and Roll back (with confirmation + permission gating), and Save & recalculate (with recalculation state + audit).
 
 **1.3.0**
 - **Customisable date range** added to every analytics screen. Presets: Today, Yesterday, This week, **This month (default, unchanged)**, Last 3 months, Custom range. Calendar-aligned by default; a rolling-window mode is a configurable option.
