@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.3.0 |
-| **Last updated** | 2026-08-05 |
+| **Version** | 1.4.0 |
+| **Last updated** | 2026-08-06 |
 | **Status** | Living document |
 | **Related** | [Master Spec](10_MASTER_SPECIFICATION.md) · [PRD](01_PRODUCT_REQUIREMENTS.md) |
 
@@ -25,6 +25,7 @@
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.4.0 | 2026-08-06 | Defined the action flows behind every named Import and Policy control (download template, view imported records, compare with previous, reject-all-&-cancel, reprocess, roll back, save & recalculate) so none is a dead end. Surfaced by a full button-level QC. Additive; no rule changes |
 | 1.3.0 | 2026-08-05 | Customisable date-range control (Today / Yesterday / This week / This month default / Last 3 months / Custom) across analytics screens, with trend charts that re-bucket to the selected range (hourly/daily/weekly/monthly). Additive; no threshold or classification changes |
 | 1.2.0 | 2026-08-04 | Access-request governance: applicant submits identity + justification only (no role); admin assigns role on approval (default Read-Only); Add/Edit-user role management specified. Surfaced by the round-3 UX audit. Additive; no attendance-rule changes |
 | 1.1.0 | 2026-08-03 | Added Review Log feature (US-R1 / FR20): review record + audit trail, follow-up tracking, outcome analytics, export. Additive; no business-rule changes |
@@ -34,6 +35,11 @@
 | 0.1.0 | 2026-08-02 | Phase 1 PRD produced |
 
 ## 2. Changes
+
+**1.4.0**
+- **Import & Policy action flows specified** (Dashboard Spec §12a). A full button-level QC of the prototype found controls that were named in the spec but had no defined behaviour and were inert in the build: *Download template, View imported records, Compare with previous, Reject all & cancel, Reprocess, Roll back, Save & recalculate*. Each now has a defined trigger, result, states, permissions and audit entry.
+- Principle added: a visible-but-inert control is a defect; every control resolves to a result, a confirm-then-result, a disabled state with a reason, or a permission/flag-hidden state.
+- Additive; no attendance rule, threshold or classification changes.
 
 **1.3.0**
 - **Customisable date range** added to every analytics screen. Presets: Today, Yesterday, This week, **This month (default, unchanged)**, Last 3 months, Custom range. Calendar-aligned by default; a rolling-window mode is a configurable option.
@@ -76,6 +82,7 @@
 | DEC-11 | Recommended employee master **adds machine-readable fields** (real start/end times, Required Daily Minutes, numeric working days) while keeping all existing columns | Removes parsing ambiguity without breaking exports | ✅ Confirmed |
 | DEC-12 | **Review Log** records reviews, actions and follow-ups with a per-review audit trail; private notes never exported; "No action required" is a first-class outcome | Closes the review loop without becoming a scoring or disciplinary surface | ✅ Confirmed |
 | DEC-13 | **Access requests carry no applicant-chosen role; the administrator assigns the role on approval (default Read-Only)** | Preserves least-privilege; keeps the access decision with admins, not requesters | ✅ Confirmed |
+| DEC-15 | **Every named control on the Import and Policy screens has a defined flow; a visible-but-inert control is a defect** | Traceability and trust — administrators must be able to act on what the UI offers | ✅ Confirmed |
 | DEC-14 | **Date range is user-customisable (default This month unchanged); trend charts re-bucket to the selected range** | Managers ask daily, weekly and quarterly questions; fixed weekly buckets under a variable range would misrepresent the data | ✅ Confirmed |
 
 ## 4. Rejected Ideas

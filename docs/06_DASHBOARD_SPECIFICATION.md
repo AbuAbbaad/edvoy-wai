@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.3.0 |
-| **Last updated** | 2026-08-05 |
+| **Version** | 1.4.0 |
+| **Last updated** | 2026-08-06 |
 | **Status** | Draft for Phase 3 (from approved Phase 1 requirements) |
 | **Related** | [PRD](01_PRODUCT_REQUIREMENTS.md) · [Permissions](04_PERMISSION_MATRIX.md) · [UX Decisions](07_UX_DECISIONS.md) · [Attendance Rules](03_ATTENDANCE_RULES.md) · [Review Log Story](05a_USER_STORY_REVIEW_LOG.md) |
 
@@ -26,6 +26,7 @@
 10. [Screen: Import Centre](#10-screen-import-centre)
 11. [Screen: Import History & Detail](#11-screen-import-history--detail)
 12. [Screen: Policy & Shift Settings](#12-screen-policy--shift-settings)
+12a. [Action Flows: Import & Policy](#12a-action-flows-import--policy)
 13. [Screen: Holiday & Premise Settings](#13-screen-holiday--premise-settings)
 14. [Screen: User & Role Management](#14-screen-user--role-management)
 15. [Screen: Audit Log](#15-screen-audit-log)
@@ -191,7 +192,7 @@ Four lists, each with evidence columns and a review-status column.
 | **Purpose** | Guided, safe import of each file type |
 | **Steps** | 1 Select type → 2 Upload → 3 Preview & map → 4 Validate → 5 Summary → 6 Process → 7 Result |
 | **Widgets** | Type cards (expected columns, last successful import, template, guidance); dropzone; header-mapping grid; validation summary; progress states |
-| **User actions** | Select type; upload; map columns; import valid / reject / cancel; download rejects |
+| **User actions** | Select type; **download template (§12a.1)**; upload; map columns; import valid; **reject all & cancel (§12a.4)**; download rejects |
 | **Validation** | Reject/Warn/Quarantine per [Data Spec §10](02_DATA_SPECIFICATION.md#10-data-validation-rules); fingerprint + logical key idempotency |
 | **Processing states** | Queued, Validating, Importing, Calculating metrics, Completed, Completed with warnings, Failed, Cancelled |
 | **Empty state** | "No imports yet" |
@@ -205,7 +206,7 @@ Four lists, each with evidence columns and a review-status column.
 | **Purpose** | Traceability of every import |
 | **History columns** | Import ID, filename, type, uploaded by, timestamp, date range, rows, inserted, updated, rejected, warnings, status |
 | **Detail widgets** | All history fields + processing times, failure reason, file hash, mapping version, duration; links: view records, download error report, download validation report, reprocess, roll back (permission), compare with previous |
-| **User actions** | Open detail; download reports; reprocess; roll back |
+| **User actions** | Open detail; **view imported records (§12a.2)**; **compare with previous (§12a.3)**; download reports; **reprocess (§12a.5)**; **roll back (§12a.6)** |
 | **Validation** | Roll back gated by permission |
 | **Empty state** | "No imports yet" |
 | **Loading state** | Row skeletons |
@@ -217,11 +218,94 @@ Four lists, each with evidence columns and a review-status column.
 |---|---|
 | **Purpose** | Configure attendance policies and shifts |
 | **Widgets** | Policy list (scoped + effective-dated); editors for grace, late threshold, frequency %, required hours, short-hours measure, remote threshold, min-records; shift definitions |
-| **User actions** | Create/edit policy; set effective date; save |
+| **User actions** | Create/edit policy; set effective date; **save & recalculate (§12a.7)** |
 | **Validation** | Numeric ranges; effective-date ordering; changes trigger recalculation + audit of old/new |
 | **Empty state** | "No custom policies — org defaults apply" |
 | **Loading state** | Form skeleton |
 | **Permissions** | Super Admin, Admin |
+
+## 12a. Action Flows: Import & Policy
+
+Earlier versions named these controls on the Import and Policy screens (§10, §11, §12) but did not define what each does when activated. This section specifies the flow behind every such control so none is a dead end. Each flow states its trigger, result, states, permissions and audit.
+
+### 12a.1 Download template (Import Centre, §10)
+
+| | |
+|---|---|
+| **Trigger** | "Download template" on a selected import type |
+| **Result** | Downloads a blank CSV for that type, with the exact expected header row and one example data row; filename `<type>_template.csv`. No employee data. |
+| **States** | Ready; (on generation) a brief "Preparing template…"; Completed (browser download). |
+| **Errors** | If the type has no defined schema, the control is disabled with a tooltip. |
+| **Permissions** | Any role that can reach Import Centre (Super Admin, Admin, HR Operator). |
+| **Audit** | Not audited (no data leaves; template only). |
+
+### 12a.2 View imported records (Import Detail, §11)
+
+| | |
+|---|---|
+| **Trigger** | "View imported records" on an import-detail view |
+| **Result** | Opens the set of rows this import inserted or updated, scoped to the viewer's access, as a filterable table (employee, date, status, insert/update flag). Read-only. |
+| **States** | Loading (row skeletons); Loaded; Empty ("This import changed no rows"). |
+| **Drill-down** | A row opens the employee/day evidence, consistent with the explainability rule (§17b, [PRD G5](01_PRODUCT_REQUIREMENTS.md#4-product-goals)). |
+| **Permissions** | Super Admin, Admin, HR Operator — row-level access applied. |
+| **Audit** | Viewing is not audited; any export from this view follows the export rules ([Permissions §9](04_PERMISSION_MATRIX.md#9-export-permissions)). |
+
+### 12a.3 Compare with previous (Import Detail, §11)
+
+| | |
+|---|---|
+| **Trigger** | "Compare with previous" on an import-detail view |
+| **Result** | Shows a difference summary between this import and the **previous successful import of the same type**: counts of rows added, updated, unchanged and removed/absent, plus notable field-level changes (e.g. clock times, status). Presented as a read-only comparison, not an editable merge. |
+| **No previous import** | The control is disabled with "No earlier import of this type to compare." |
+| **States** | Loading; Loaded (diff summary); Empty ("No differences — identical to the previous import"). |
+| **Idempotency link** | Uses the same fingerprint + logical-key identity as import idempotency ([Data Spec §10](02_DATA_SPECIFICATION.md#10-data-validation-rules)) so a re-upload of the same file reports "no differences" rather than fabricated churn. |
+| **Permissions** | Super Admin, Admin, HR Operator. |
+| **Audit** | Not audited (read-only comparison). |
+
+### 12a.4 Reject all & cancel (Import Validate, §10)
+
+| | |
+|---|---|
+| **Trigger** | "Reject all & cancel" during validation, before commit |
+| **Result** | Abandons the import: the staged batch is discarded, **no rows are written**, and the wizard returns to the Import Centre. A confirmation step precedes the discard because it ends the import. |
+| **States** | Confirm ("Discard this import? Nothing has been saved yet."); Cancelled (returns to Import Centre with a toast). |
+| **Safety** | Because nothing was committed, this is a safe abort, distinct from **roll back** (§12a.6) which reverses a *committed* import. |
+| **Permissions** | Super Admin, Admin, HR Operator. |
+| **Audit** | Recorded as "Import cancelled at validation" with actor, type and timestamp. |
+
+### 12a.5 Reprocess (Import Detail, §11)
+
+| | |
+|---|---|
+| **Trigger** | "Reprocess" on a completed or failed import |
+| **Result** | Re-runs validation and metric calculation for that import's source file **without a re-upload**, producing a new processing run linked to the same source. Idempotency prevents double-counting. |
+| **States** | Queued → Validating → Importing → Calculating metrics → Completed / Completed with warnings / Failed (same state set as §10). |
+| **Permissions** | Super Admin, Admin, HR Operator. |
+| **Audit** | "Import reprocessed" with actor, import ID, timestamp and resulting status. |
+
+### 12a.6 Roll back (Import Detail, §11 — permissioned)
+
+| | |
+|---|---|
+| **Trigger** | "Roll back" on a committed import |
+| **Result** | Reverses the effect of a committed import, restoring the prior state of the affected rows. Requires explicit confirmation naming the import and the number of rows affected. |
+| **Gating** | Permission-gated: **HR Operator cannot roll back**; Super Admin and Admin can. May be feature-flagged to Phase 2 per the PRD; when disabled the control is hidden, not dead. |
+| **States** | Confirm (impact named) → Rolling back → Completed / Failed. |
+| **Permissions** | Super Admin, Admin only. |
+| **Audit** | "Import rolled back" with actor, import ID, rows affected and timestamp. |
+
+### 12a.7 Save & recalculate (Policy & Shift Settings, §12)
+
+| | |
+|---|---|
+| **Trigger** | "Save & recalculate" after editing a policy or shift |
+| **Result** | Persists the policy change with its **effective date**, then triggers recalculation of the metrics affected from that date forward. The change records **old → new** values. |
+| **Validation** | Numeric ranges and effective-date ordering are checked before save; invalid input blocks the save with an inline message. No threshold's *meaning* changes — only its configured value, per [Attendance Rules §21](03_ATTENDANCE_RULES.md#21-configurable-thresholds). |
+| **States** | Editing; (on save) Saving → Recalculating → Saved; Error (recalculation failed — the saved policy stands, a retry is offered). |
+| **Permissions** | Super Admin, Admin. |
+| **Audit** | "Policy changed" with actor, policy, old → new value, effective date and timestamp. |
+
+> **Principle.** Every named control on these screens resolves to one of: a real result, a confirmation-then-result, a disabled state with a reason, or a hidden state when permission/'feature-flag forbids it. A control that is visible but inert is a defect.
 
 ## 13. Screen: Holiday & Premise Settings
 

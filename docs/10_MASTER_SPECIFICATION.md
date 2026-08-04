@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.3.0 |
-| **Last updated** | 2026-08-05 |
+| **Version** | 1.4.0 |
+| **Last updated** | 2026-08-06 |
 | **Status** | Phases 1–2 complete; Phase 3 (UX) next |
 | **Owner** | Edvoy People & Engineering |
 
@@ -111,6 +111,8 @@ See the full tree in [Repository Tree](#4-repository-structure) at the end of th
 
 ## 6. Current Version
 
+
+**v1.4.0** — Defines the **action flows** behind every named Import and Policy control (Dashboard Spec §12a): download template, view imported records, compare with previous, reject-all-&-cancel, reprocess, roll back, save & recalculate. Surfaced by a full button-level QC of the prototype; establishes that a visible-but-inert control is a defect. Additive; no rule changes.
 
 **v1.3.0** — Adds a **customisable date-range control** (Today, Yesterday, This week, This month [default, unchanged], Last 3 months, Custom) to every analytics screen, and makes **trend charts re-bucket to the selected range** (hourly/daily/weekly/monthly) so the axis stays honest. Additive; no threshold or classification changes. Updates Dashboard Spec §17a/§17b and UX Decisions §7.
 
